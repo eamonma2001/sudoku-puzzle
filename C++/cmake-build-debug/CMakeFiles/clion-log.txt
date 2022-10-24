@@ -1,0 +1,15 @@
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja "/Users/mayimeng/Documents/Spring 2022/CS3270_Ma/project1-eamonma2001"
+fatal: cannot change to '/Users/mayimeng/Documents/Spring 2022/CS3270_Ma/project1-eamonma2001/lib/googletest': No such file or directory
+CMake Error: The current CMakeCache.txt directory /Users/mayimeng/Documents/Spring 2022/CS3270_Ma/project1-eamonma2001/cmake-build-debug/_deps/googletest-subbuild/CMakeCache.txt is different than the directory /Users/mayimeng/Documents/CS3270_Ma/project1-eamonma2001/cmake-build-debug/_deps/googletest-subbuild where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt
+
+CMake Error at /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.21/Modules/FetchContent.cmake:1005 (message):
+  CMake step for googletest failed: 1
+Call Stack (most recent call first):
+  /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.21/Modules/FetchContent.cmake:1146:EVAL:2 (__FetchContent_directPopulate)
+  /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.21/Modules/FetchContent.cmake:1146 (cmake_language)
+  CMakeLists.txt:30 (FetchContent_Populate)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/Users/mayimeng/Documents/Spring 2022/CS3270_Ma/project1-eamonma2001/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+See also "/Users/mayimeng/Documents/Spring 2022/CS3270_Ma/project1-eamonma2001/cmake-build-debug/CMakeFiles/CMakeError.log".

@@ -1,0 +1,124 @@
+#lang racket
+
+(provide test-checkpoint-code)
+(provide solve-sudoku)
+
+(require racket/lazy-require)
+(lazy-require ["main.rkt" (get-value set-value)])
+
+
+; Description: Implement the Sudoku solver.
+
+
+; Define some global constants.
+(define BOARD-SIZE 9)       ; The size of the board.
+(define ROWS 9)             ; The number of rows.
+(define COLS 9)             ; The number of columns.
+(define GRID-SIZE 3)        ; The size of a subgrid.
+
+
+; Returns the result of checking if a value can be placed at
+; a specific row and column on a board.
+;
+; It is your job to call your implemented "checker" functions
+; from this function so it can be tested for the checkpoint
+; requirements.
+;
+; DO NOT change the name/signature of this function, as our
+; testing script depends upon it.
+;
+; @param  board The board to check.
+; @param  row   The row where the value will be placed.
+; @param  col   The column where the value will be placed.
+; @param  num   The number to be placed.
+; @return Whether value can be placed at row and col in board.
+(define (test-checkpoint-code board row col num)
+  (if (test-row board row 0 num)
+      (if (test-col board 0 col num)
+          (if (test-block board (* GRID-SIZE (add1 (quotient row GRID-SIZE)))
+                          (* GRID-SIZE (add1 (quotient col GRID-SIZE)))
+                          (* GRID-SIZE (quotient row GRID-SIZE))
+                          (* GRID-SIZE (quotient col GRID-SIZE)) num)
+              #t
+              #f)
+          #f)
+      #f)
+  )
+
+
+; This function should call your recursive backtracking solver
+; and, depending upon the result, either return the solved puzzle
+; or return null if the puzzle has no solution.
+;
+; It is your job to write this and necessary helper functions.
+;
+; DO NOT change the name/signature of this function, as our
+; testing script depends upon it.
+;
+(define (solve-sudoku board)
+  (define (helper board row col num)
+    (cond
+      ((> num BOARD-SIZE) null)
+      ((= col COLS) board)
+      ((= row ROWS) (helper board 0 (add1 col) num))
+      ((> (get-value board row col) 0) (helper board (add1 row) col num))
+      ((test-checkpoint-code board row col num)
+       (let ([solved-board (helper (set-value board row col num) (add1 row) col 0)])
+         (if (null? solved-board)
+             (helper (set-value board row col 0) row col (add1 num))
+             solved-board)))
+      ((helper board row col (add1 num)))))
+  (helper board 0 0 1)
+)
+
+
+; Add your other functions here.
+
+; Returns the result of checking if a value can be placed at
+; a specific row.
+;
+; @param  board The board to check.
+; @param  row   The row where the value will be placed.
+; @param  col   The column where the value will be placed.
+; @param  num   The number to be placed.
+; @return Whether value can be placed at row.
+(define (test-row board row col num)
+  (cond
+    ((= col COLS) #t)
+    ((= num (get-value board row col)) #f)
+    (#t (test-row board row (add1 col) num))))
+
+
+; Add your other functions here.
+
+; Returns the result of checking if a value can be placed at
+; a specific column.
+;
+; @param  board The board to check.
+; @param  row   The row where the value will be placed.
+; @param  col   The column where the value will be placed.
+; @param  num   The number to be placed.
+; @return Whether value can be placed at column.
+(define (test-col board row col num)
+  (cond
+    ((= row ROWS) #t)
+    ((= num (get-value board row col)) #f)
+    (#t (test-col board (add1 row) col num))))
+
+
+; Add your other functions here.
+
+; Returns the result of checking if a value can be placed at
+; a specific 3x3 block.
+;
+; @param  board The board to check.
+; @param  row   The row where the value will be placed.
+; @param  col   The column where the value will be placed.
+; @param  num   The number to be placed.
+; @return Whether value can be placed at 3x3 block.
+(define (test-block board new-row new-col row col num)
+  [cond
+    [(= col new-col) #t]
+    [(= row new-row) (test-block board new-row new-col (- row GRID-SIZE) (add1 col) num)]   
+    [(= num (get-value board row col)) #f ]   
+    [(< row new-row) (test-block board new-row new-col (add1 row) col num)]])
